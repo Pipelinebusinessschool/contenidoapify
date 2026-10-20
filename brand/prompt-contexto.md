@@ -27,7 +27,7 @@ Jorge Conde, CEO de PIPELINE Business School (PBS): ventas B2B, arquitectura com
 - PIPELINE siempre en mayúsculas. Hashtags fijos: #PIPELINEBusinessSchool #JorgeConde.
 - Si se menciona FAP (Forecast Accelerator Program): nunca poner precio; el CTA siempre lleva a agendar el diagnóstico.
 
-## Lo que ya sabemos (diagnóstico del 19-oct-2026)
+## Lo que ya sabemos (diagnóstico del 19-oct-2026, revalidado el 20-oct con 50 Reels por cuenta)
 - **Mediana orgánica: ~600 vistas por Reel** (1 % de los seguidores). Instagram casi no me distribuye. Las 647K visualizaciones del panel (30 días) no vienen de los Reels orgánicos; probablemente de pauta (sin confirmar).
 - **El tema no es el problema; el arranque sí.** Casi todo es la misma tesis (fundador atrapado como mejor vendedor), y produjo tanto un 248× como un 0,1×.
   - Ganan: número + mejor parte retenida ("Un CEO solo tiene 3 funciones, y la 3ª es la que pocos logran", 148K) · formato entrevista/alguien me pregunta + confesión ("elegí perder ventas a propósito", 6,2K = 10×) · cita literal del avatar ("nadie vende como yo", 6×) · pregunta incómoda ("¿qué le pasa a la cuota si desapareces 30 días?", 5×).
@@ -35,6 +35,16 @@ Jorge Conde, CEO de PIPELINE Business School (PBS): ventas B2B, arquitectura com
 - Mis Reels duran ~50 s de mediana; los ganadores de la competencia, 25–47 s.
 - Competencia: @crece30x/@andresbilbao viven de clips de podcast de 25–35 s con historia y cifra concreta, más el CTA "Comenta cualquier palabra" (top: 5,3M vistas y 44K comentarios). El outlier de @sandlerdanmacias (40×) es contrarian y coloquial.
 - Decisiones: mantener la tesis y cambiar la puerta de entrada · formato entrevista/podcast como pilar · 30–45 s · CTA de palabra clave con DM automático · rehacer el Reel de 148K.
+
+### Actualización del 20-oct-2026 (ver `data/diagnostico-2026-10-20.md`)
+- **Bloqueante: se publican copias del mismo Reel con 1–2 min de diferencia.** La primera copia distribuye; las duplicadas quedan en 0–2 vistas. 5 de los últimos 50 Reels son re-publicaciones (16-sep, 16-oct, 19-oct).
+- **El alcance cayó 7× en esa misma ventana**: mediana de 614 vistas (31–90 días) a **86 vistas (últimos 30 días)**. Causa probable: penalización por contenido duplicado. Hay que descartarla antes de culpar al contenido.
+- La mediana histórica de 590 vistas (1,01 % de seguidores) se confirma sobre 50 Reels.
+- **Los comentarios son el motor sin usar**: 152 comentarios en 50 Reels (3 por pieza). Un solo Reel de @crece30x tiene 44.379 con el CTA "Comenta cualquier palabra".
+- **El comparable real es @sandlerdanmacias**: 85.702 seguidores, mediana 1.328 (1,55 %), **2,50 Reels/día** contra mis 0,18. Formato fijo de clip de podcast con sello "🎙️ Máquina de Ventas · Sandler"; su outlier de 33.748 vistas (25×) tiene 3 días.
+- Medianas de referencia: @crece30x 14.898 (3,50 % de seguidores, el mejor ratio), @andresbilbao 16.304 (1,59 %).
+- Duración: todo lo que pasó de 56 s murió. El Reel de 39 s fue el más comentado del mes (13). Techo operativo: **45 s**.
+- El nombre visible de la cuenta ya es "Jorge Conde | Sistemas de Ventas con IA".
 
 ## Estándar de cada guion
 1. Idea y por qué debería funcionar (qué dato u outlier la respalda).
@@ -59,6 +69,14 @@ Llama a los actores directamente. Mide los outliers contra la mediana de cada cu
 | Comentarios | `apify/instagram-comment-scraper` | `{"directUrls":["url"],"resultsLimit":200}` |
 
 Trampas: `apify/instagram-profile-scraper` y `apify/instagram-reel-scraper` devuelven `BlockedError`; usa hpix. Las URLs de video de los anuncios caducan en días: transcribe el mismo día. Un transcript vacío con status success significa que el video no tiene voz.
+
+### Operación del conector (verificado el 20-oct-2026)
+- Cuenta `conceivable_algorithm` (PIPELINE Business School), plan **STARTER**: US$19/mes de crédito, retención de datos 31 días. Los 7 actores de la tabla responden y todos cobran **pay-per-event**.
+- **`run-sync-get-dataset-items` da 502 ("upstream request failed") con corridas de más de ~1 min.** Para varias cuentas o 50+ Reels: `POST /v2/acts/<actor>/runs`, consultar `GET /v2/actor-runs/<id>` hasta `SUCCEEDED` y bajar con `GET /v2/datasets/<defaultDatasetId>/items?format=json`. **No pasar `clean=true`**: devuelve cuerpo vacío.
+- Una cuenta por corrida. Cuatro perfiles en un solo input tumban la llamada.
+- Costos reales medidos: 12 Reels de 1 cuenta = US$0,004 · 50 Reels × 4 cuentas = US$0,18. Capturar es barato; transcribir es lo que cuesta.
+- Antes de cualquier corrida grande, revisar crédito con `GET /v2/users/me/limits` (campo `current.monthlyUsageUsd`).
+- Las vistas vienen en `view_count`; si falta, en `raw_data.play_count`. La duración está solo en `raw_data.video_duration`.
 
 ## Método "Rayos X" (para lanzamientos y bancos de ideas)
 Cuando te pida ideas de ads o de Reels a partir de lo que ya funciona:
