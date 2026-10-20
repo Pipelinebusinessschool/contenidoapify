@@ -77,6 +77,8 @@ Trampas: `apify/instagram-profile-scraper` y `apify/instagram-reel-scraper` devu
 - Costos reales medidos: 12 Reels de 1 cuenta = US$0,004 · 50 Reels × 4 cuentas = US$0,18. Capturar es barato; transcribir es lo que cuesta.
 - Antes de cualquier corrida grande, revisar crédito con `GET /v2/users/me/limits` (campo `current.monthlyUsageUsd`).
 - Las vistas vienen en `view_count`; si falta, en `raw_data.play_count`. La duración está solo en `raw_data.video_duration`.
+- **`@pipelinebusinessschool` devuelve `Restricted account`**: la cuenta institucional no se puede capturar con hpix. Para analizarla hay que buscar otra vía.
+- **Con `reels_count` bajo (3–5) el actor devuelve primero los Reels fijados**, no los recientes: salen las 3 mejores piezas históricas y cualquier mediana sale inflada. Para medir, pedir 50 y filtrar; para ver lo último, ordenar por `taken_at`.
 
 ## Método "Rayos X" (para lanzamientos y bancos de ideas)
 Cuando te pida ideas de ads o de Reels a partir de lo que ya funciona:
